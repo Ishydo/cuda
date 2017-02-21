@@ -14,7 +14,8 @@ Le concept de base du traitement de donnée que nous allons faire.
 	work(s);
 	}
     } // Barrière de synchronisation implicite
-    ```
+```
+    
     
 ## OMP in da place
 

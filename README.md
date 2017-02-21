@@ -1,4 +1,22 @@
-# cuda
+# Le cours de traitement parallèle de données
+
+## La belle boucle
+
+Le concept de base du traitement de donnée que nous allons faire.
+```cpp
+    const int NB_THREAD = OmpTools::setAndGetNaturalGranularity();
+
+    #pragma omp parallel
+    {
+	while(s<n)
+	{
+	// TID RECUPERATION
+	work(s);
+	}
+    } // Barrière de synchronisation implicite
+    ```
+    
+## OMP in da place
 
 OMP permet de faire du traitement parallèle très facilement, on peut typiquement transformer un comportement séquentiel for en comportement parallèle :
 ```cpp

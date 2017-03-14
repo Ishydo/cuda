@@ -19,7 +19,7 @@ using std::endl;
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
-extern __global__ void mandelbrot(uchar4* ptrDevPixels, uint w, uint h, float t, const DomaineMath& domaineMath);
+extern __global__ void mandelbrot(uchar4* ptrDevPixels, uint w, uint h, float t, DomaineMath domaineMath);
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -33,7 +33,7 @@ extern __global__ void mandelbrot(uchar4* ptrDevPixels, uint w, uint h, float t,
  \*-------------------------------------*/
 
 Mandelbrot::Mandelbrot(const Grid& grid, uint w, uint h, int N, uint n, const DomaineMath& domaineMath) :
-	Animable_I<uchar4>(grid, w, h, "Mandelbrot_OMP_rgba_uchar4",domaineMath), variateurAnimation(Interval<int>(0, N), 1)
+	Animable_I<uchar4>(grid, w, h, "Mandelbrot_OMP_rgba_uchar4",domaineMath), variateurAnimation(Interval<int>(20, N), 1)
     {
     // Input
     this->n = n;

@@ -53,8 +53,8 @@ Animable_I<uchar4>* MandelbrotProvider::createAnimable()
     int coreMP = Device::getCoreCountMP();
 
     // On défini les tailles de grille et de blocks à utiliser, en changeant les valeurs on a des résultats différents
-    dim3 dg = dim3(48, 1, 1);  		// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
-    dim3 db = dim3(960, 1, 1);   	// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
+    dim3 dg = dim3(mp, 2, 1);  		// (48, 1, 1) disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
+    dim3 db = dim3(coreMP, 2, 1);   	// (960, 1, 1) disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
     Grid grid(dg, db);
 
     return new Mandelbrot(grid, dw, dh, N, n, domaineMath);

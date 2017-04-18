@@ -1,8 +1,10 @@
-#include "RayTracingProvider.h"
-#include "RayTracing.h"
-
-#include "MathTools.h"
+#include <iostream>
+#include <limits.h>
 #include "Grid.h"
+#include "MathTools.h"
+
+using std::cout;
+using std::endl;
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -12,9 +14,13 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
+#include "MontecarloMultiGPU.h"
+
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
+
+bool useMontecarloMultiGPU(void);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -25,44 +31,26 @@
  \*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
+ |*				Public					*|
  \*-------------------------------------*/
 
-/**
- * Override
- */
-Animable_I<uchar4>* RayTracingProvider::createAnimable()
-    {
+bool useMontecarloMultiGPU()
+{
+	float a = -1.0f;
+	float b = 1.0f;
+	float M = 1.0f;
+	int nbFlechettes = INT_MAX / 2;
 
-    //Nombre de spheres
-    int nbSphere = 40;
+	dim3 dg = dim3(64, 1, 1);  		// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
+	dim3 db = dim3(1024, 1, 1);   	// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
+	Grid grid(dg, db);
 
-    // Animation;
-    float dt = 2 * PI / 1000;
-
-    // Dimension
-    int dw = 16 * 60;
-    int dh = 16 * 60;
-
-    // Grid Cuda
-    int mp=Device::getMPCount();
-    int coreMP=Device::getCoreCountMP();
-
-    dim3 dg = dim3(mp, 2, 1);  		// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
-    dim3 db = dim3(coreMP, 2, 1);   	// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
-    Grid grid(dg, db);
-
-    return new RayTracing(grid, dw, dh, dt, nbSphere);
-    }
-
-/**
- * Override
- */
-Image_I* RayTracingProvider::createImageGL(void)
-    {
-    ColorRGB_01 colorTexte(1, 0, 0); // red
-    return new ImageAnimable_RGBA_uchar4(createAnimable(), colorTexte);
-    }
+	MontecarloMultiGPU montecarloMultiGPU(grid, nbFlechettes, 0.001);
+	float piHat = montecarloMultiGPU.run();
+	cout << "Pi = " << piHat << endl;
+	return true;
+	//return MathTools::isEquals(pi, PI_FLOAT, 0.01f);
+}
 
 /*--------------------------------------*\
  |*		Private			*|

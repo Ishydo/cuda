@@ -1,11 +1,9 @@
+
 #pragma once
 
 #include "cudaTools.h"
-#include "MathTools.h"
-#include "Sphere.h"
-
-#include "Animable_I_GPU.h"
-using namespace gpu;
+#include <curand_kernel.h>
+#include "Grid.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -15,51 +13,56 @@ using namespace gpu;
  |*		Public			*|
  \*-------------------------------------*/
 
-class RayTracing: public Animable_I<uchar4>
-    {
+class Montecarlo
+{
 	/*--------------------------------------*\
 	|*		Constructor		*|
 	 \*-------------------------------------*/
 
-    public:
-
-	RayTracing(const Grid& grid, uint w, uint h, float dt, uint nbSphere);
-	virtual ~RayTracing(void);
-
-	/*--------------------------------------*\
-	 |*		Methodes		*|
-	 \*-------------------------------------*/
-
-    public:
-
-	/*-------------------------*\
-	|*   Override Animable_I   *|
-	 \*------------------------*/
+public:
 
 	/**
-	 * Call periodicly by the api
+	 * update w by v1+v2
 	 */
-	virtual void process(uchar4* ptrDevPixels, uint w, uint h, const DomaineMath& domaineMath);
+	Montecarlo(const Grid& grid, float a, float b, float M, int nbFlechettes);
 
-	/**
-	 * Call periodicly by the api
-	 */
-	virtual void animationStep();
+	virtual ~Montecarlo(void);
 
 	/*--------------------------------------*\
-	 |*		Attributs		*|
+	|*		Methodes		*|
 	 \*-------------------------------------*/
 
-    private:
+public:
+
+	void run();
+	float getPi();
+	int getCoutFlechette();
+
+	/*--------------------------------------*\
+	|*		Attributs		*|
+	 \*-------------------------------------*/
+
+private:
 
 	// Inputs
-	float dt;
-	uint nbSphere;
-	Sphere* ptrTabSphere;
-	Sphere* ptrDevTabSphere;
-	size_t sizeOctet;
+	float a;
+	float b;
+	float M;
+	int nbFlechettes;
 
-    };
+	// Outputs
+	float pi;
+
+	// Tools
+	dim3 dg;
+	dim3 db;
+	int N0;
+	int* ptrDevN0;
+	curandState* ptrTabDevGeneratorGM;
+	size_t sizeOctetN0;
+	size_t sizeOctetTabGenerator;
+	size_t sizeSM;
+};
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|

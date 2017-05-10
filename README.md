@@ -3,15 +3,20 @@
 ## La belle boucle
 
 Le concept de base du traitement de donnée que nous allons faire.
+
 ```cpp
     const int NB_THREAD = OmpTools::setAndGetNaturalGranularity();
 
     #pragma omp parallel
     {
+    
+    	const int TID = OmpTools::getTid();
+	int s = TID;
+    
 	while(s<n)
 	{
-	// TID RECUPERATION
 	work(s);
+	s += NB_THREAD;
 	}
     } // Barrière de synchronisation implicite
 ```

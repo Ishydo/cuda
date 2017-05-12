@@ -5,7 +5,8 @@
 Le concept de base du traitement de donnée que nous allons faire.
 
 ```cpp
-    const int NB_THREAD = OmpTools::setAndGetNaturalGranularity();
+
+    const int NB_THREAD = OmpTools::getNbThread();
 
     #pragma omp parallel
     {
@@ -13,7 +14,7 @@ Le concept de base du traitement de donnée que nous allons faire.
     	const int TID = OmpTools::getTid();
 	int s = TID;
     
-	while(s<n)
+	while(s < WH)
 	{
 	work(s);
 	s += NB_THREAD;

@@ -6,8 +6,6 @@ Le concept de base du traitement de donnée que nous allons faire.
 
 ```cpp
 
-    
-
     #pragma omp parallel
     {
         const int NB_THREAD = OmpTools::getNbThread();

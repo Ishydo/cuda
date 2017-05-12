@@ -6,12 +6,13 @@ Le concept de base du traitement de donnée que nous allons faire.
 
 ```cpp
 
-    const int NB_THREAD = OmpTools::getNbThread();
+    
 
     #pragma omp parallel
     {
-    
+        const int NB_THREAD = OmpTools::getNbThread();
     	const int TID = OmpTools::getTid();
+	
 	int s = TID;
     
 	while(s < WH)
@@ -19,6 +20,7 @@ Le concept de base du traitement de donnée que nous allons faire.
 	work(s);
 	s += NB_THREAD;
 	}
+	
     } // Barrière de synchronisation implicite
 ```
     
